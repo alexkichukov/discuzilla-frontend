@@ -1,3 +1,4 @@
 export { default as client } from './client'
-export { getEvent } from './events'
-export { favouriteEvent } from './auth'
+export * from './auth'
+export * from './users'
+export * from './posts'

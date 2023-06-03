@@ -2,8 +2,8 @@ import { FormInput } from '@/components/FormInput'
 import { Button, Spacer } from '@nextui-org/react'
 import { useNavigate } from 'react-router-dom'
 import { authenticate } from '@/store/auth'
-import { register } from '@/requests/auth'
 import { AsyncToast } from '@/util/toast'
+import { register } from '@/requests'
 import { Formik, Form } from 'formik'
 import { useDispatch } from '@/hooks'
 import * as Yup from 'yup'
@@ -30,8 +30,8 @@ const SignUpForm = () => {
     const toast = new AsyncToast('Signing up...')
 
     try {
-      const token = await register(username, password, email)
-      dispatch(authenticate(token))
+      const user = await register(username, password, email)
+      dispatch(authenticate(user))
       navigate('/', { replace: true })
       toast.success('Successfully signed up!')
     } catch (e) {
@@ -54,8 +54,7 @@ const SignUpForm = () => {
           <Spacer y={1} />
           <FormInput name='email' id='email' placeholder='Email' label='Email' fullWidth bordered />
           <Spacer y={1} />
-          <FormInput
-            password
+          <FormInput.Password
             name='password'
             id='password'
             label='Password'
@@ -64,8 +63,7 @@ const SignUpForm = () => {
             bordered
           />
           <Spacer y={1} />
-          <FormInput
-            password
+          <FormInput.Password
             name='confirmPassword'
             id='confirmPassword'
             label='Confirm Password'

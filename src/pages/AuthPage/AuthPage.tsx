@@ -1,14 +1,14 @@
-import { Button, CSS, Card, Container, Grid } from '@nextui-org/react'
+import { Button, Card, Container, Grid } from '@nextui-org/react'
 import { useState } from 'react'
 import LoginForm from './LoginForm'
 import SignUpForm from './SignUpForm'
 
-const Auth = () => {
+const AuthPage = () => {
   const [tab, setTab] = useState<'login' | 'signup'>('login')
 
   return (
     <Container lg>
-      <Grid.Container justify='center' alignItems='center' css={{ height: '100vh' }}>
+      <Grid.Container justify='center' alignItems='center' css={{ minHeight: '100vh' }}>
         <Card css={{ width: '320px' }}>
           <Card.Header css={{ padding: 0 }}>
             <Grid.Container>
@@ -56,4 +56,4 @@ const Auth = () => {
   )
 }
 
-export default Auth
+export default AuthPage

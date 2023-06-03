@@ -1,18 +1,9 @@
+import { Dropdown, Image, Link, Navbar, Text, Row, Divider, Button } from '@nextui-org/react'
 import { NavLink, useNavigate, useLocation } from 'react-router-dom'
-import {
-  Button,
-  Dropdown,
-  Image,
-  Link,
-  Navbar,
-  Text,
-  Avatar,
-  Row,
-  Divider
-} from '@nextui-org/react'
+import { useDispatch, useSelector } from '@/hooks'
 import { deauthenticate } from '@/store/auth'
 import { toast } from 'react-toastify'
-import { useDispatch, useSelector } from '@/hooks'
+import { MdCreate } from 'react-icons/md'
 import DiscuzillaLogo from '@/assets/discuzilla.png'
 
 const Navigation = () => {
@@ -27,7 +18,16 @@ const Navigation = () => {
     toast(`You've been logged out`)
   }
 
-  const links = [{ to: '/', name: 'Home' }]
+  const links = [
+    { to: '/', name: 'Home' },
+    { to: '/leaderboard', name: 'Leaderboard' }
+  ]
+
+  const collapseLinks = [
+    { to: '/', name: 'Home' },
+    { to: '/leaderboard', name: 'Leaderboard' },
+    { to: '/new-post', name: 'New post' }
+  ]
 
   return (
     <Navbar variant='sticky' maxWidth='sm'>
@@ -40,16 +40,23 @@ const Navigation = () => {
       </Navbar.Brand>
 
       <Navbar.Content hideIn='xs'>
-        <Navbar.Link to='/' isActive={location.pathname === '/'} as={NavLink}>
-          Home
-        </Navbar.Link>
+        {links.map((link) => (
+          <Navbar.Link
+            key={link.name}
+            to={link.to}
+            isActive={location.pathname === link.to}
+            as={NavLink}
+          >
+            {link.name}
+          </Navbar.Link>
+        ))}
 
         <Dropdown placement='bottom-right'>
-          <Navbar.Item>
-            <Dropdown.Button light>
-              <Text b>Account</Text>
-            </Dropdown.Button>
-          </Navbar.Item>
+          <Dropdown.Trigger>
+            <Navbar.Link isActive={['/user/posts', '/user/comments'].includes(location.pathname)}>
+              Account
+            </Navbar.Link>
+          </Dropdown.Trigger>
           <Dropdown.Menu
             onAction={(k) => {
               const key = k.toString()
@@ -58,10 +65,22 @@ const Navigation = () => {
             }}
             disabledKeys={['hi']}
           >
-            <Dropdown.Item key='hi' variant='light' textValue='hi'>
+            <Dropdown.Item
+              key='hi'
+              variant='light'
+              textValue='hi'
+              css={{ height: 'auto', py: '$5' }}
+            >
               <Row>
                 <Text css={{ mr: '$2' }}>Hi</Text>
                 <Text b>{user.username}</Text>
+              </Row>
+              <Row>
+                <Text>You have</Text>
+                <Text b css={{ mx: '$2' }}>
+                  {user.points}
+                </Text>
+                <Text>points!</Text>
               </Row>
             </Dropdown.Item>
             <Dropdown.Item key='/user/posts' withDivider textValue='profile'>
@@ -75,25 +94,48 @@ const Navigation = () => {
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
+
+        <Navbar.Link>
+          <Button
+            size='sm'
+            bordered
+            auto
+            icon={<MdCreate />}
+            onClick={() => navigate('/new-post')}
+            color='gradient'
+          >
+            New Post
+          </Button>
+        </Navbar.Link>
       </Navbar.Content>
 
       <Navbar.Collapse>
-        <Navbar.CollapseItem>
-          <Link color='inherit' to='/' as={NavLink}>
-            Home
-          </Link>
-        </Navbar.CollapseItem>
+        {collapseLinks.map((link) => (
+          <Navbar.CollapseItem key={link.name} isActive={location.pathname === link.to}>
+            <Link color='inherit' to={link.to} as={NavLink}>
+              {link.name}
+            </Link>
+          </Navbar.CollapseItem>
+        ))}
         <Divider />
-        <Navbar.CollapseItem>
-          <Row css={{ pt: '$10' }}>
-            <Text size='$lg' css={{ mr: '$2' }}>
+        <Navbar.CollapseItem css={{ d: 'flex', flexDirection: 'column', py: '$6' }}>
+          <Row>
+            <Text span css={{ mr: '$2' }}>
               Hi
             </Text>
-            <Text size='$lg' b>
+            <Text span b>
               {user.username}
             </Text>
           </Row>
+          <Row>
+            <Text span>You have</Text>
+            <Text span b css={{ mx: '$2' }}>
+              {user.points}
+            </Text>
+            <Text span>points!</Text>
+          </Row>
         </Navbar.CollapseItem>
+        <Divider css={{ mb: '$5' }} />
         <Navbar.CollapseItem>
           <Link color='inherit' to='/' as={NavLink}>
             Posts

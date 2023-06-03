@@ -1,24 +1,9 @@
-import { Input, InputProps } from '@nextui-org/react'
+import { Input, InputProps, Textarea } from '@nextui-org/react'
+import { TextareaProps } from '@nextui-org/react/types/textarea'
 import { useField } from 'formik'
 
-interface Props extends Partial<InputProps> {
-  name: string
-  password?: boolean
-}
-
-const FormInput = ({ name, password, ...props }: Props) => {
+const FormInput = ({ name, ...props }: { name: string } & Partial<InputProps>) => {
   const [field, meta] = useField(name)
-
-  if (password) {
-    return (
-      <Input.Password
-        {...field}
-        {...props}
-        helperText={meta.error && meta.touched ? meta.error : undefined}
-        helperColor='error'
-      />
-    )
-  }
 
   return (
     <Input
@@ -30,4 +15,30 @@ const FormInput = ({ name, password, ...props }: Props) => {
   )
 }
 
+const FormInputPassword = ({ name, ...props }: { name: string } & Partial<InputProps>) => {
+  const [field, meta] = useField(name)
+  return (
+    <Input.Password
+      {...field}
+      {...props}
+      helperText={meta.error && meta.touched ? meta.error : undefined}
+      helperColor='error'
+    />
+  )
+}
+
+const FormInputTextarea = ({ name, ...props }: { name: string } & Partial<TextareaProps>) => {
+  const [field, meta] = useField(name)
+  return (
+    <Textarea
+      {...field}
+      {...props}
+      helperText={meta.error && meta.touched ? meta.error : undefined}
+      helperColor='error'
+    />
+  )
+}
+
+FormInput.Password = FormInputPassword
+FormInput.Textarea = FormInputTextarea
 export default FormInput

@@ -1,12 +1,12 @@
 import { Button, Spacer } from '@nextui-org/react'
 import { useNavigate } from 'react-router-dom'
-import { Formik, Form } from 'formik'
-import { authenticate } from '@/store/auth'
-import { useDispatch } from '@/hooks'
-import * as Yup from 'yup'
 import { FormInput } from '@/components/FormInput'
-import { login } from '@/requests/auth'
+import { authenticate } from '@/store/auth'
 import { AsyncToast } from '@/util/toast'
+import { Formik, Form } from 'formik'
+import { useDispatch } from '@/hooks'
+import { login } from '@/requests'
+import * as Yup from 'yup'
 
 const LoginForm = () => {
   const dispatch = useDispatch()
@@ -26,8 +26,8 @@ const LoginForm = () => {
     const toast = new AsyncToast('Logging in...')
 
     try {
-      const token = await login(username, password)
-      dispatch(authenticate(token))
+      const user = await login(username, password)
+      dispatch(authenticate(user))
       navigate('/', { replace: true })
       toast.success('Successfully logged in!')
     } catch (e) {
@@ -48,8 +48,7 @@ const LoginForm = () => {
             bordered
           />
           <Spacer y={1} />
-          <FormInput
-            password
+          <FormInput.Password
             name='password'
             id='password'
             label='Password'
