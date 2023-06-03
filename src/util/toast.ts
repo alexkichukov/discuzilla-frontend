@@ -9,7 +9,7 @@ interface AsyncToastOptions {
 export class AsyncToast {
   state: 'progress' | 'error' | 'success'
   id: Id
-  delay = 500
+  delay = 0
   closeAfter = 5000
 
   constructor(text: string, options?: AsyncToastOptions) {

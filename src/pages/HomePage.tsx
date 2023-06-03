@@ -1,46 +1,35 @@
 import { Container, Grid, Text } from '@nextui-org/react'
-import { useState, useEffect } from 'react'
-import { getAllPosts } from '@/requests'
-import { toast } from 'react-toastify'
-import Post from '@/components/Post'
+import { useGetPostsQuery } from '@/store/api'
+import PostCard from '@/components/PostCard'
+import AnimateIn from '@/components/AnimateIn'
 
 const HomePage = () => {
-  const [posts, setPosts] = useState<SimplifiedPost[]>([])
+  const {
+    data: posts,
+    isLoading,
+    isError,
+    error
+  } = useGetPostsQuery(undefined, { refetchOnMountOrArgChange: true })
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const data = await getAllPosts()
-        setPosts(data)
-      } catch (e) {
-        toast.error('Could not load posts')
-      }
-    }
-    getData()
-  }, [])
-
-  const updateLikedPost = (i: number) => {
-    const newPosts = [...posts]
-    const { isLiked, likeCount } = newPosts[i]
-    newPosts[i].isLiked = !isLiked
-    newPosts[i].likeCount = isLiked ? likeCount - 1 : likeCount + 1
-    setPosts(newPosts)
-  }
+  if (isLoading) return <>Loading</>
+  else if (isError) return <>Error {(error as any).data.message}</>
 
   return (
-    <Container sm css={{ py: '$8' }}>
-      <Text size='$3xl' css={{ my: '$10' }}>
-        Top posts
-      </Text>
+    <AnimateIn>
+      <Container sm css={{ py: '$8' }}>
+        <Text size='$3xl' css={{ my: '$10' }}>
+          Top posts
+        </Text>
 
-      <Grid.Container gap={3} css={{ padding: 0 }}>
-        {posts.map((post, i) => (
-          <Grid key={post.id} sm={6}>
-            <Post post={post} onLike={() => updateLikedPost(i)} />
-          </Grid>
-        ))}
-      </Grid.Container>
-    </Container>
+        <Grid.Container gap={3} css={{ padding: 0 }}>
+          {posts!.map((post, i) => (
+            <Grid key={post.id} sm={6}>
+              <PostCard post={post} />
+            </Grid>
+          ))}
+        </Grid.Container>
+      </Container>
+    </AnimateIn>
   )
 }
 

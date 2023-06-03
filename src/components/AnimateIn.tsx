@@ -1,12 +1,12 @@
-import { Outlet, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
-const PageLayout = () => {
-  const { pathname } = useLocation()
+interface Props {
+  children: React.ReactNode
+}
 
+const AnimateIn = ({ children }: Props) => {
   return (
     <motion.div
-      key={pathname}
       initial='initial'
       animate='in'
       variants={{
@@ -25,9 +25,9 @@ const PageLayout = () => {
         duration: 0.3
       }}
     >
-      <Outlet />
+      {children}
     </motion.div>
   )
 }
 
-export default PageLayout
+export default AnimateIn

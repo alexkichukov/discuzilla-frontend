@@ -31,16 +31,17 @@ interface Post {
   body: string
   author: SimplifiedUser
   likeCount: number
-  comments: Comment[]
+  comments: PostComment[]
   isLiked: boolean
   date: string
 }
 
-interface Comment {
+interface PostComment {
   id: number
   body: string
   post: SimplifiedPost
   author: SimplifiedUser
   likeCount: number
   isLiked: boolean
+  date: string
 }

@@ -1,4 +1,3 @@
-import { FormInput } from '@/components/FormInput'
 import { Button, Spacer } from '@nextui-org/react'
 import { useNavigate } from 'react-router-dom'
 import { authenticate } from '@/store/auth'
@@ -6,6 +5,7 @@ import { AsyncToast } from '@/util/toast'
 import { register } from '@/requests'
 import { Formik, Form } from 'formik'
 import { useDispatch } from '@/hooks'
+import FormInput from '@/components/FormInput'
 import * as Yup from 'yup'
 
 const SignUpForm = () => {

@@ -1,6 +1,7 @@
 import { Card, Grid, Link, Text } from '@nextui-org/react'
 import { FaRegHeart, FaHeart, FaComment } from 'react-icons/fa'
 import { NavLink, useNavigate } from 'react-router-dom'
+import { useLikePostMutation } from '@/store/api'
 import { toast } from 'react-toastify'
 import { likePost } from '@/requests'
 import removeMd from 'remove-markdown'
@@ -8,16 +9,15 @@ import moment from 'moment'
 
 interface Props {
   post: SimplifiedPost
-  onLike: () => void
 }
 
-const Post = ({ post, onLike }: Props) => {
+const PostCard = ({ post }: Props) => {
   const navigate = useNavigate()
+  const [likePost] = useLikePostMutation()
 
   const like = async () => {
     try {
       await likePost(post.id)
-      onLike()
     } catch {
       toast.error('Could not like post')
     }
@@ -31,7 +31,7 @@ const Post = ({ post, onLike }: Props) => {
         </Text>
       </Card.Header>
       <Card.Divider />
-      <Card.Body css={{ py: '$5', minHeight: '120px' }}>
+      <Card.Body css={{ py: '$5', minHeight: '105px' }}>
         <Grid.Container alignItems='center'>
           <Grid>
             <Link as={NavLink} to={`/user/${post.author.id}`}>
@@ -79,4 +79,4 @@ const Post = ({ post, onLike }: Props) => {
   )
 }
 
-export default Post
+export default PostCard
