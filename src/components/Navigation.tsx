@@ -83,10 +83,10 @@ const Navigation = () => {
                 <Text>points!</Text>
               </Row>
             </Dropdown.Item>
-            <Dropdown.Item key='/user/posts' withDivider textValue='profile'>
+            <Dropdown.Item key={`/user/${user.id}/posts`} withDivider textValue='profile'>
               <Text b>Posts</Text>
             </Dropdown.Item>
-            <Dropdown.Item key='/user/comments' textValue='comments'>
+            <Dropdown.Item key={`/user/${user.id}/comments`} textValue='comments'>
               <Text b>Comments</Text>
             </Dropdown.Item>
             <Dropdown.Item key='logout' color='error' withDivider textValue='logout'>

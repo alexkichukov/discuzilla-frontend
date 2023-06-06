@@ -25,7 +25,7 @@ const NewPostPage = () => {
     try {
       const { id } = await addPost({ title, body }).unwrap()
       toast.success('Post created!')
-      navigate(`post/${id}`, { replace: true })
+      navigate(`/post/${id}`, { replace: true })
     } catch (e) {
       toast.error('Error while creating post')
     }

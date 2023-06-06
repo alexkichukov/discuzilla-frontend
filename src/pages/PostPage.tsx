@@ -1,4 +1,15 @@
-import { Button, Card, Container, Grid, Input, Link, Row, Text, Textarea } from '@nextui-org/react'
+import {
+  Button,
+  Card,
+  Container,
+  Grid,
+  Input,
+  Link,
+  Loading,
+  Row,
+  Text,
+  Textarea
+} from '@nextui-org/react'
 import {
   useDeletePostMutation,
   useGetPostQuery,
@@ -7,7 +18,7 @@ import {
 } from '@/store/api'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
 import { FaComment, FaHeart, FaRegHeart } from 'react-icons/fa'
-import { NavLink, useParams } from 'react-router-dom'
+import { NavLink, useParams, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useSelector } from '@/hooks'
 import { useEffect, useState } from 'react'
@@ -21,6 +32,7 @@ import { MdCancel, MdDelete, MdEdit } from 'react-icons/md'
 
 const PostPage = () => {
   const params = useParams<{ id: string }>()
+  const navigate = useNavigate()
   const id = parseInt(params.id!)
 
   const user = useSelector((state) => state.auth.user!)
@@ -41,9 +53,8 @@ const PostPage = () => {
     }
   }, [postQuery])
 
-  if (postQuery.isLoading) return <>Loading</>
-  else if (postQuery.isError || !postQuery.isSuccess)
-    return <>Error {(postQuery.error as any).data.message}</>
+  if (!postQuery.data) return <Container sm>Loading</Container>
+  if (postQuery.isError) return <Container sm>Error</Container>
 
   const post = postQuery.data
 
@@ -67,6 +78,7 @@ const PostPage = () => {
   const remove = async () => {
     try {
       await deletePost(id)
+      navigate('/', { replace: true })
     } catch {
       toast.error('Could not update post')
     }

@@ -45,3 +45,15 @@ interface PostComment {
   isLiked: boolean
   date: string
 }
+
+interface PostsPage {
+  page: number
+  totalPages: number
+  posts: SimplifiedPost[]
+}
+
+interface CommentsPage {
+  page: number
+  totalPages: number
+  comments: PostComment[]
+}

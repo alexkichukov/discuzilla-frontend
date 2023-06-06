@@ -10,15 +10,20 @@ export const apiSlice = createApi({
       return headers
     }
   }),
-  tagTypes: ['Post', 'Posts'],
+  tagTypes: ['Post', 'Posts', 'Comments'],
   endpoints: (builder) => ({
+    // Get a user
+    getUser: builder.query<User, number>({
+      query: (id) => `user/${id}`
+    }),
+
     // Get all posts
-    getPosts: builder.query<SimplifiedPost[], void>({
-      query: () => 'posts',
+    getPosts: builder.query<PostsPage, { page: number; author?: number }>({
+      query: ({ page, author }) => `posts?page=${page}${author ? `&author=${author}` : ''}`,
       providesTags: ['Posts']
     }),
 
-    // Get a singular post
+    // Get a post
     getPost: builder.query<Post, number>({
       query: (id) => `posts/${id}`,
       providesTags: ['Post']
@@ -56,10 +61,16 @@ export const apiSlice = createApi({
       invalidatesTags: ['Post', 'Posts']
     }),
 
+    // Get all comments
+    getComments: builder.query<CommentsPage, { page?: number; author: number }>({
+      query: ({ page, author }) => `comments?page=${page}&author=${author}`,
+      providesTags: ['Comments']
+    }),
+
     // Add a comment
-    addComment: builder.mutation<PostComment, { id: number; comment: string }>({
-      query: ({ id, comment }) => ({
-        url: `posts/${id}/comment`,
+    addComment: builder.mutation<PostComment, { postID: number; comment: string }>({
+      query: ({ postID, comment }) => ({
+        url: `comments?post=${postID}`,
         method: 'POST',
         body: { body: comment }
       }),
@@ -69,7 +80,7 @@ export const apiSlice = createApi({
     // Like a comment
     likeComment: builder.mutation<void, number>({
       query: (id) => ({ url: `comments/${id}/like`, method: 'PUT' }),
-      invalidatesTags: ['Post']
+      invalidatesTags: ['Post', 'Comments']
     }),
 
     // Delete a comment
@@ -91,12 +102,14 @@ export const apiSlice = createApi({
 })
 
 export const {
+  useGetUserQuery,
   useGetPostsQuery,
   useGetPostQuery,
   useAddPostMutation,
   useLikePostMutation,
   useDeletePostMutation,
   useUpdatePostMutation,
+  useGetCommentsQuery,
   useAddCommentMutation,
   useLikeCommentMutation,
   useDeleteCommentMutation,

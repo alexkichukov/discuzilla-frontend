@@ -22,7 +22,7 @@ const NewCommentForm = ({ postID }: Props) => {
 
   const onSubmit = async ({ comment }: typeof initialValues) => {
     try {
-      await addComment({ id: postID, comment: comment })
+      await addComment({ postID, comment: comment })
       toast.success('Comment submitted!')
     } catch {
       toast.error('Error while creating comment')

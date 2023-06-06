@@ -1,33 +1,39 @@
-import { Container, Grid, Text } from '@nextui-org/react'
+import { Container, Grid, Pagination, Row, Text } from '@nextui-org/react'
 import { useGetPostsQuery } from '@/store/api'
-import PostCard from '@/components/PostCard'
+import { useEffect, useState } from 'react'
 import AnimateIn from '@/components/AnimateIn'
+import PostCard from '@/components/PostCard'
 
 const HomePage = () => {
-  const {
-    data: posts,
-    isLoading,
-    isError,
-    error
-  } = useGetPostsQuery(undefined, { refetchOnMountOrArgChange: true })
+  const [page, setPage] = useState(1)
+  const [postsPage, setPostsPage] = useState<PostsPage | null>(null)
 
-  if (isLoading) return <>Loading</>
-  else if (isError) return <>Error {(error as any).data.message}</>
+  const postsQuery = useGetPostsQuery({ page }, { refetchOnMountOrArgChange: true })
+
+  useEffect(() => {
+    if (postsQuery.data) setPostsPage(postsQuery.data)
+  }, [postsQuery])
+
+  if (!postsPage) return <Container sm>Loading</Container>
 
   return (
     <AnimateIn>
       <Container sm css={{ py: '$8' }}>
         <Text size='$3xl' css={{ my: '$10' }}>
-          Top posts
+          Posts
         </Text>
 
         <Grid.Container gap={3} css={{ padding: 0 }}>
-          {posts!.map((post, i) => (
+          {postsPage.posts.map((post) => (
             <Grid key={post.id} sm={6}>
               <PostCard post={post} />
             </Grid>
           ))}
         </Grid.Container>
+
+        <Row css={{ py: '$10' }} justify='center'>
+          <Pagination page={page} total={postsPage.totalPages} onChange={(p) => setPage(p)} />
+        </Row>
       </Container>
     </AnimateIn>
   )
