@@ -1,4 +1,5 @@
-interface AuthUser extends User {
+interface AuthUser {
+  id: number
   token: string
 }
 
@@ -56,4 +57,10 @@ interface CommentsPage {
   page: number
   totalPages: number
   comments: PostComment[]
+}
+
+interface LeaderboardPage {
+  page: number
+  totalPages: number
+  users: User[]
 }

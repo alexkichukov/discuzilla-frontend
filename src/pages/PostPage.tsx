@@ -1,39 +1,28 @@
 import {
-  Button,
-  Card,
-  Container,
-  Grid,
-  Input,
-  Link,
-  Loading,
-  Row,
-  Text,
-  Textarea
-} from '@nextui-org/react'
-import {
   useDeletePostMutation,
   useGetPostQuery,
   useLikePostMutation,
   useUpdatePostMutation
 } from '@/store/api'
+import { Button, Card, Container, Grid, Input, Link, Row, Text, Textarea } from '@nextui-org/react'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
 import { FaComment, FaHeart, FaRegHeart } from 'react-icons/fa'
 import { NavLink, useParams, useNavigate } from 'react-router-dom'
+import { MdCancel, MdDelete, MdEdit } from 'react-icons/md'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useSelector } from '@/hooks'
-import { useEffect, useState } from 'react'
 import NewCommentForm from '@/components/NewCommentForm'
 import CommentCard from '@/components/CommentCard'
 import AnimateIn from '@/components/AnimateIn'
+import Loading from '@/components/Loading'
 import remarkGfm from 'remark-gfm'
 import moment from 'moment'
 import '@/assets/styles/github-markdown.css'
-import { MdCancel, MdDelete, MdEdit } from 'react-icons/md'
 
 const PostPage = () => {
-  const params = useParams<{ id: string }>()
+  const { id } = useParams() as { id: string }
   const navigate = useNavigate()
-  const id = parseInt(params.id!)
 
   const user = useSelector((state) => state.auth.user!)
   const [editMode, setEditMode] = useState(false)
@@ -53,7 +42,12 @@ const PostPage = () => {
     }
   }, [postQuery])
 
-  if (!postQuery.data) return <Container sm>Loading</Container>
+  if (!postQuery.data)
+    return (
+      <Container sm>
+        <Loading />
+      </Container>
+    )
   if (postQuery.isError) return <Container sm>Error</Container>
 
   const post = postQuery.data

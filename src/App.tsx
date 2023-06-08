@@ -3,11 +3,12 @@ import { NextUIProvider, createTheme } from '@nextui-org/react'
 import { ToastContainer } from 'react-toastify'
 import { useSelector } from '@/hooks'
 import UserPage, { UserPostsPage, UserCommentsPage } from '@/pages/UserPage'
+import LeaderboardPage from '@/pages/LeaderboardPage'
+import Navigation from '@/components/Navigation'
+import NewPostPage from '@/pages/NewPostPage'
 import HomePage from '@/pages/HomePage'
 import AuthPage from '@/pages/AuthPage'
 import PostPage from '@/pages/PostPage'
-import NewPostPage from '@/pages/NewPostPage'
-import Navigation from '@/components/Navigation'
 import 'react-toastify/dist/ReactToastify.css'
 
 // App theme
@@ -25,6 +26,7 @@ const App = () => {
             <>
               <Route index path='/' element={<HomePage />} />
               <Route path='/post/:id' element={<PostPage />} />
+              <Route path='/leaderboard' element={<LeaderboardPage />} />
               <Route path='/new-post' element={<NewPostPage />} />
               <Route path='/user/:id/' element={<UserPage />}>
                 <Route index element={<Navigate replace to='posts' />} />

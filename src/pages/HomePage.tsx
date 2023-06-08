@@ -3,6 +3,8 @@ import { useGetPostsQuery } from '@/store/api'
 import { useEffect, useState } from 'react'
 import AnimateIn from '@/components/AnimateIn'
 import PostCard from '@/components/PostCard'
+import Loading from '@/components/Loading'
+import NoData from '@/components/NoData'
 
 const HomePage = () => {
   const [page, setPage] = useState(1)
@@ -14,7 +16,12 @@ const HomePage = () => {
     if (postsQuery.data) setPostsPage(postsQuery.data)
   }, [postsQuery])
 
-  if (!postsPage) return <Container sm>Loading</Container>
+  if (!postsPage)
+    return (
+      <Container sm>
+        <Loading />
+      </Container>
+    )
 
   return (
     <AnimateIn>
@@ -23,17 +30,23 @@ const HomePage = () => {
           Posts
         </Text>
 
-        <Grid.Container gap={3} css={{ padding: 0 }}>
-          {postsPage.posts.map((post) => (
-            <Grid key={post.id} sm={6}>
-              <PostCard post={post} />
-            </Grid>
-          ))}
-        </Grid.Container>
+        {postsPage.posts.length === 0 ? (
+          <NoData text='There are no posts yet' />
+        ) : (
+          <>
+            <Grid.Container gap={3} css={{ padding: 0 }}>
+              {postsPage.posts.map((post) => (
+                <Grid key={post.id} sm={6}>
+                  <PostCard post={post} />
+                </Grid>
+              ))}
+            </Grid.Container>
 
-        <Row css={{ py: '$10' }} justify='center'>
-          <Pagination page={page} total={postsPage.totalPages} onChange={(p) => setPage(p)} />
-        </Row>
+            <Row css={{ py: '$10' }} justify='center'>
+              <Pagination page={page} total={postsPage.totalPages} onChange={(p) => setPage(p)} />
+            </Row>
+          </>
+        )}
       </Container>
     </AnimateIn>
   )

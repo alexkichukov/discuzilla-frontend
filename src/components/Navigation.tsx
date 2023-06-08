@@ -5,12 +5,14 @@ import { deauthenticate } from '@/store/auth'
 import { toast } from 'react-toastify'
 import { MdCreate } from 'react-icons/md'
 import DiscuzillaLogo from '@/assets/discuzilla.png'
+import { useGetUserQuery } from '@/store/api'
 
 const Navigation = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  const user = useSelector((state) => state.auth.user!)
+  const { id: userID } = useSelector((state) => state.auth.user!)
+  const { data: user } = useGetUserQuery(userID)
 
   const logout = () => {
     navigate('/')
@@ -73,20 +75,20 @@ const Navigation = () => {
             >
               <Row>
                 <Text css={{ mr: '$2' }}>Hi</Text>
-                <Text b>{user.username}</Text>
+                <Text b>{user?.username}</Text>
               </Row>
               <Row>
                 <Text>You have</Text>
                 <Text b css={{ mx: '$2' }}>
-                  {user.points}
+                  {user?.points}
                 </Text>
                 <Text>points!</Text>
               </Row>
             </Dropdown.Item>
-            <Dropdown.Item key={`/user/${user.id}/posts`} withDivider textValue='profile'>
+            <Dropdown.Item key={`/user/${user?.id}/posts`} withDivider textValue='profile'>
               <Text b>Posts</Text>
             </Dropdown.Item>
-            <Dropdown.Item key={`/user/${user.id}/comments`} textValue='comments'>
+            <Dropdown.Item key={`/user/${user?.id}/comments`} textValue='comments'>
               <Text b>Comments</Text>
             </Dropdown.Item>
             <Dropdown.Item key='logout' color='error' withDivider textValue='logout'>
@@ -124,13 +126,13 @@ const Navigation = () => {
               Hi
             </Text>
             <Text span b>
-              {user.username}
+              {user?.username}
             </Text>
           </Row>
           <Row>
             <Text span>You have</Text>
             <Text span b css={{ mx: '$2' }}>
-              {user.points}
+              {user?.points}
             </Text>
             <Text span>points!</Text>
           </Row>

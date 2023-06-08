@@ -10,29 +10,36 @@ export const apiSlice = createApi({
       return headers
     }
   }),
-  tagTypes: ['Post', 'Posts', 'Comments'],
+  tagTypes: ['Post', 'Posts', 'Comments', 'User'],
   endpoints: (builder) => ({
     // Get a user
-    getUser: builder.query<User, number>({
-      query: (id) => `user/${id}`
+    getUser: builder.query<User, string | number>({
+      query: (id) => `user/${id}`,
+      providesTags: ['User']
+    }),
+
+    // Get leaderboard
+    getLeaderboard: builder.query<LeaderboardPage, { page: number }>({
+      query: ({ page }) => `leaderboard?page=${page}`,
+      providesTags: ['User']
     }),
 
     // Get all posts
-    getPosts: builder.query<PostsPage, { page: number; author?: number }>({
+    getPosts: builder.query<PostsPage, { page: number; author?: string | number }>({
       query: ({ page, author }) => `posts?page=${page}${author ? `&author=${author}` : ''}`,
       providesTags: ['Posts']
     }),
 
     // Get a post
-    getPost: builder.query<Post, number>({
+    getPost: builder.query<Post, string>({
       query: (id) => `posts/${id}`,
       providesTags: ['Post']
     }),
 
     // Like a post
-    likePost: builder.mutation<void, number>({
+    likePost: builder.mutation<void, string | number>({
       query: (id) => ({ url: `posts/${id}/like`, method: 'PUT' }),
-      invalidatesTags: ['Post', 'Posts']
+      invalidatesTags: ['Post', 'Posts', 'User']
     }),
 
     // Add a post
@@ -42,17 +49,17 @@ export const apiSlice = createApi({
         method: 'POST',
         body: { title, body }
       }),
-      invalidatesTags: ['Post', 'Posts']
+      invalidatesTags: ['Post', 'Posts', 'User']
     }),
 
     // Delete a post
-    deletePost: builder.mutation<void, number>({
+    deletePost: builder.mutation<void, string | number>({
       query: (id) => ({ url: `posts/${id}`, method: 'DELETE' }),
       invalidatesTags: ['Posts']
     }),
 
     // Update a post
-    updatePost: builder.mutation<Post, { id: number; title: string; body: string }>({
+    updatePost: builder.mutation<Post, { id: string | number; title: string; body: string }>({
       query: ({ id, title, body }) => ({
         url: `posts/${id}`,
         method: 'PUT',
@@ -62,35 +69,35 @@ export const apiSlice = createApi({
     }),
 
     // Get all comments
-    getComments: builder.query<CommentsPage, { page?: number; author: number }>({
+    getComments: builder.query<CommentsPage, { page?: number; author: string | number }>({
       query: ({ page, author }) => `comments?page=${page}&author=${author}`,
       providesTags: ['Comments']
     }),
 
     // Add a comment
-    addComment: builder.mutation<PostComment, { postID: number; comment: string }>({
+    addComment: builder.mutation<PostComment, { postID: string | number; comment: string }>({
       query: ({ postID, comment }) => ({
         url: `comments?post=${postID}`,
         method: 'POST',
         body: { body: comment }
       }),
-      invalidatesTags: ['Post', 'Posts']
+      invalidatesTags: ['Post', 'Posts', 'User']
     }),
 
     // Like a comment
-    likeComment: builder.mutation<void, number>({
+    likeComment: builder.mutation<void, string | number>({
       query: (id) => ({ url: `comments/${id}/like`, method: 'PUT' }),
-      invalidatesTags: ['Post', 'Comments']
+      invalidatesTags: ['Post', 'Comments', 'User']
     }),
 
     // Delete a comment
-    deleteComment: builder.mutation<void, number>({
+    deleteComment: builder.mutation<void, string | number>({
       query: (id) => ({ url: `comments/${id}`, method: 'DELETE' }),
       invalidatesTags: ['Post', 'Posts']
     }),
 
     // Update a comment
-    updateComment: builder.mutation<PostComment, { id: number; comment: string }>({
+    updateComment: builder.mutation<PostComment, { id: string | number; comment: string }>({
       query: ({ id, comment }) => ({
         url: `comments/${id}`,
         method: 'PUT',
@@ -103,6 +110,7 @@ export const apiSlice = createApi({
 
 export const {
   useGetUserQuery,
+  useGetLeaderboardQuery,
   useGetPostsQuery,
   useGetPostQuery,
   useAddPostMutation,
