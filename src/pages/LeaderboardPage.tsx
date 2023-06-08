@@ -37,9 +37,9 @@ const LeaderboardPage = () => {
           <NoData text='There are no users on the leaderboard yet' />
         ) : (
           <>
-            <Grid.Container gap={3} css={{ padding: 0 }}>
+            <Grid.Container gap={1} css={{ padding: 0 }}>
               {leaderboardPage.users.map((user, index) => (
-                <Grid key={user.id} xs>
+                <Grid key={user.id} xs={12}>
                   <Card
                     css={{ flexDirection: 'row', alignItems: 'center' }}
                     isPressable

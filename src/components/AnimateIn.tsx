@@ -7,6 +7,7 @@ interface Props {
 const AnimateIn = ({ children }: Props) => {
   return (
     <motion.div
+      style={{ translateZ: 0 }}
       initial='initial'
       animate='in'
       variants={{
@@ -16,7 +17,8 @@ const AnimateIn = ({ children }: Props) => {
         },
         in: {
           opacity: 1,
-          translateX: 0
+          translateX: 0,
+          translateZ: 1
         }
       }}
       transition={{

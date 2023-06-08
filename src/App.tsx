@@ -5,6 +5,7 @@ import { useSelector } from '@/hooks'
 import UserPage, { UserPostsPage, UserCommentsPage } from '@/pages/UserPage'
 import LeaderboardPage from '@/pages/LeaderboardPage'
 import Navigation from '@/components/Navigation'
+import SettingsPage from '@/pages/SettingsPage'
 import NewPostPage from '@/pages/NewPostPage'
 import HomePage from '@/pages/HomePage'
 import AuthPage from '@/pages/AuthPage'
@@ -28,6 +29,7 @@ const App = () => {
               <Route path='/post/:id' element={<PostPage />} />
               <Route path='/leaderboard' element={<LeaderboardPage />} />
               <Route path='/new-post' element={<NewPostPage />} />
+              <Route path='/settings' element={<SettingsPage />} />
               <Route path='/user/:id/' element={<UserPage />}>
                 <Route index element={<Navigate replace to='posts' />} />
                 <Route path='posts' element={<UserPostsPage />} />

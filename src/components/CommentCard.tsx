@@ -14,9 +14,10 @@ import '@/assets/styles/github-markdown.css'
 
 interface Props {
   comment: PostComment
+  disableEditing?: boolean
 }
 
-const CommentCard = ({ comment }: Props) => {
+const CommentCard = ({ comment, disableEditing }: Props) => {
   const user = useSelector((state) => state.auth.user!)
   const [editMode, setEditMode] = useState(false)
   const [editedText, setEditedText] = useState(comment.body)
@@ -134,7 +135,7 @@ const CommentCard = ({ comment }: Props) => {
               {comment.likeCount} like{comment.likeCount !== 1 && 's'}
             </Text>
           </Card>
-          {user.id === comment.author.id && userControls}
+          {user.id === comment.author.id && !disableEditing && userControls}
         </Row>
       </Grid.Container>
     </Card>

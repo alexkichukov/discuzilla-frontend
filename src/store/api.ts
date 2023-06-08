@@ -18,6 +18,16 @@ export const apiSlice = createApi({
       providesTags: ['User']
     }),
 
+    // Update authenticated user
+    updateUser: builder.mutation<void, { username: string; email: string }>({
+      query: ({ username, email }) => ({
+        url: `user`,
+        method: 'PUT',
+        body: { username, email }
+      }),
+      invalidatesTags: ['Post', 'Posts', 'Comments', 'User']
+    }),
+
     // Get leaderboard
     getLeaderboard: builder.query<LeaderboardPage, { page: number }>({
       query: ({ page }) => `leaderboard?page=${page}`,
@@ -110,6 +120,7 @@ export const apiSlice = createApi({
 
 export const {
   useGetUserQuery,
+  useUpdateUserMutation,
   useGetLeaderboardQuery,
   useGetPostsQuery,
   useGetPostQuery,

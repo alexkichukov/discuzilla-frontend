@@ -11,7 +11,7 @@ const Navigation = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  const { id: userID } = useSelector((state) => state.auth.user!)
+  const userID = useSelector((state) => state.auth.user!.id)
   const { data: user } = useGetUserQuery(userID)
 
   const logout = () => {
@@ -86,10 +86,34 @@ const Navigation = () => {
               </Row>
             </Dropdown.Item>
             <Dropdown.Item key={`/user/${user?.id}/posts`} withDivider textValue='profile'>
-              <Text b>Posts</Text>
+              <Text
+                css={{
+                  color: location.pathname === `/user/${user?.id}/posts` ? '$primary' : undefined
+                }}
+                b
+              >
+                Posts
+              </Text>
             </Dropdown.Item>
             <Dropdown.Item key={`/user/${user?.id}/comments`} textValue='comments'>
-              <Text b>Comments</Text>
+              <Text
+                css={{
+                  color: location.pathname === `/user/${user?.id}/comments` ? '$primary' : undefined
+                }}
+                b
+              >
+                Comments
+              </Text>
+            </Dropdown.Item>
+            <Dropdown.Item key='/settings' textValue='comments'>
+              <Text
+                css={{
+                  color: location.pathname === `/settings` ? '$primary' : undefined
+                }}
+                b
+              >
+                Settings
+              </Text>
             </Dropdown.Item>
             <Dropdown.Item key='logout' color='error' withDivider textValue='logout'>
               Log Out
@@ -138,13 +162,13 @@ const Navigation = () => {
           </Row>
         </Navbar.CollapseItem>
         <Divider css={{ mb: '$5' }} />
-        <Navbar.CollapseItem>
-          <Link color='inherit' to='/' as={NavLink}>
+        <Navbar.CollapseItem isActive={location.pathname === `/user/${user?.id}/posts`}>
+          <Link color='inherit' to={`/user/${user?.id}/posts`} as={NavLink}>
             Posts
           </Link>
         </Navbar.CollapseItem>
-        <Navbar.CollapseItem>
-          <Link color='inherit' to='/' as={NavLink}>
+        <Navbar.CollapseItem isActive={location.pathname === `/user/${user?.id}/comments`}>
+          <Link color='inherit' to={`/user/${user?.id}/comments`} as={NavLink}>
             Comments
           </Link>
         </Navbar.CollapseItem>

@@ -18,7 +18,7 @@ const LoginForm = () => {
   }
 
   const schema = Yup.object({
-    username: Yup.string().required('Required field'),
+    username: Yup.string().required('Required field').min(3, 'At least 3 characters'),
     password: Yup.string().required('Required field').min(8, 'At least 8 characters')
   })
 

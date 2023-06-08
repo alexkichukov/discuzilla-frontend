@@ -1,6 +1,7 @@
 import { Grid, Row, Pagination, Card, Text, Container } from '@nextui-org/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useGetCommentsQuery } from '@/store/api'
+import { FiArrowRight } from 'react-icons/fi'
 import { useState } from 'react'
 import CommentCard from '@/components/CommentCard'
 import Loading from '@/components/Loading'
@@ -36,8 +37,13 @@ const UserCommentsPage = () => {
                   variant='bordered'
                   css={{ p: '$8', backgroundColor: 'transparent' }}
                 >
-                  <Text h4>{comment.post.title}</Text>
-                  <CommentCard comment={comment} />
+                  <Row css={{ alignItems: 'center', color: '$primary', mb: '$8' }}>
+                    <Text h4 css={{ m: 0, p: 0, mr: '$5' }}>
+                      {comment.post.title}
+                    </Text>
+                    <FiArrowRight size={20} />
+                  </Row>
+                  <CommentCard comment={comment} disableEditing />
                 </Card>
               </Grid>
             ))}
