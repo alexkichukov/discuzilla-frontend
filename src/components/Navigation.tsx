@@ -172,6 +172,11 @@ const Navigation = () => {
             Comments
           </Link>
         </Navbar.CollapseItem>
+        <Navbar.CollapseItem isActive={location.pathname === '/settings'}>
+          <Link color='inherit' to='/settings' as={NavLink}>
+            Settings
+          </Link>
+        </Navbar.CollapseItem>
         <Navbar.CollapseItem>
           <Link color='error'>Logout</Link>
         </Navbar.CollapseItem>
