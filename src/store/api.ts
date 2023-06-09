@@ -28,6 +28,12 @@ export const apiSlice = createApi({
       invalidatesTags: ['Post', 'Posts', 'Comments', 'User']
     }),
 
+    // Delete authenticated user
+    deleteUser: builder.mutation<void, void>({
+      query: () => ({ url: `user`, method: 'DELETE' }),
+      invalidatesTags: ['Post', 'Posts', 'Comments', 'User']
+    }),
+
     // Get leaderboard
     getLeaderboard: builder.query<LeaderboardPage, { page: number }>({
       query: ({ page }) => `leaderboard?page=${page}`,
@@ -126,6 +132,7 @@ export const apiSlice = createApi({
 export const {
   useGetUserQuery,
   useUpdateUserMutation,
+  useDeleteUserMutation,
   useGetLeaderboardQuery,
   useGetPostsQuery,
   useGetPostQuery,

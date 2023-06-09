@@ -1,17 +1,21 @@
-import { Button, Container, Spacer, Text } from '@nextui-org/react'
-import { useGetUserQuery, useUpdateUserMutation } from '@/store/api'
+import { Button, Col, Container, Popover, Row, Spacer, Text } from '@nextui-org/react'
+import { useDeleteUserMutation, useGetUserQuery, useUpdateUserMutation } from '@/store/api'
+import { MdDelete } from 'react-icons/md'
 import { toast } from 'react-toastify'
 import { Formik, Form } from 'formik'
-import { useSelector } from '@/hooks'
+import { useDispatch, useSelector } from '@/hooks'
 import FormInput from '@/components/FormInput'
 import AnimateIn from '@/components/AnimateIn'
 import Loading from '@/components/Loading'
 import * as Yup from 'yup'
+import { deauthenticate } from '@/store/auth'
 
 const SettingsPage = () => {
   const userID = useSelector((state) => state.auth.user!.id)
+  const dispatch = useDispatch()
   const userQuery = useGetUserQuery(userID)
   const [updateUser] = useUpdateUserMutation()
+  const [deleteUser] = useDeleteUserMutation()
 
   if (!userQuery.data)
     return (
@@ -37,6 +41,15 @@ const SettingsPage = () => {
       toast.success('Your data has been updated!')
     } catch (e) {
       toast.error('Error while updating your data')
+    }
+  }
+
+  const remove = async () => {
+    try {
+      await deleteUser()
+      dispatch(deauthenticate())
+    } catch {
+      toast.error('Could not delete account')
     }
   }
 
@@ -84,6 +97,36 @@ const SettingsPage = () => {
             </Form>
           )}
         </Formik>
+
+        <Text h2 css={{ pt: '$15', pb: '$5' }}>
+          Delete your account
+        </Text>
+        <Popover>
+          <Popover.Trigger>
+            <Button color='error' size='lg' css={{ w: '100%' }}>
+              <MdDelete size={20} style={{ marginRight: 5 }} />
+              Delete
+            </Button>
+          </Popover.Trigger>
+          <Popover.Content>
+            <Col
+              css={{
+                p: '$10',
+                d: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                minWidth: 200
+              }}
+            >
+              <Text b size='$lg'>
+                Are you sure?
+              </Text>
+              <Button onClick={() => remove()} color='error' auto css={{ w: '100%', mt: '$5' }}>
+                Confirm
+              </Button>
+            </Col>
+          </Popover.Content>
+        </Popover>
       </Container>
     </AnimateIn>
   )
