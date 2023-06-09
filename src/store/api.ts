@@ -35,10 +35,15 @@ export const apiSlice = createApi({
     }),
 
     // Get all posts
-    getPosts: builder.query<PostsPage, { page: number; author?: string | number }>({
-      query: ({ page, author }) => `posts?page=${page}${author ? `&author=${author}` : ''}`,
-      providesTags: ['Posts']
-    }),
+    getPosts: builder.query<PostsPage, { page: number; author?: string | number; search?: string }>(
+      {
+        query: ({ page, author, search }) =>
+          `posts?page=${page}${author ? `&author=${author}` : ''}${
+            search ? `&search=${search}` : ''
+          }`,
+        providesTags: ['Posts']
+      }
+    ),
 
     // Get a post
     getPost: builder.query<Post, string>({
